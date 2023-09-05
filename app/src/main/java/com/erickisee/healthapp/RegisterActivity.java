@@ -40,11 +40,13 @@ public class RegisterActivity extends AppCompatActivity {
                 email = edEmail.getText().toString();
                 username = edUsername.getText().toString();
                 password = edPassword.getText().toString();
-
+                Database db = new Database(getApplicationContext(), "HealthCare", null, 1);
                 if(firstName.length()==0 ||lastName.length()==0 ||email.length()==0 ||username.length()==0 ||password.length()==0){
 
                 }else{
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    db.register(username,email,password);
+
+                    startActivity(new Intent(RegisterActivity.this, Login.class));
                 }
 
             }

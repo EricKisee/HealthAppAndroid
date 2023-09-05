@@ -2,7 +2,9 @@ package com.erickisee.healthapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,12 +43,21 @@ public class Login extends AppCompatActivity {
 
                 String username = edUsername.getText().toString();
                 String password = edPassword.getText().toString();
+                Database db = new Database(getApplicationContext(), "HealthCare" , null , 1);
+
                 if(username.length()==0||password.length()==0){
                     Log.d(TAG, "onClick: No text provided");
-                    Toast.makeText(getApplicationContext(), "Please fill all details", Toast.LENGTH_SHORT).show();
                 }else{
                     Log.d(TAG, "onClick: Text provided");
-                    Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                    if(db.login(username,password)==1) {
+                        SharedPreferences sharedPreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("username" , username);
+                        editor.apply();
+                        startActivity(new Intent(Login.this, MainActivity.class));
+                    } else {
+                        Log.d(TAG, "onClick: Invalid Username or Password");
+                    }
                 }
             }
         });
